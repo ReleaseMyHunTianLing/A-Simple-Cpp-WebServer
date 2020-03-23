@@ -1,10 +1,11 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include<list>
-#include<time.h>
-#include<assert.h>
-#include"http_conn.h"
+#include <list>
+#include <time.h>
+#include <assert.h>
+#include "http_conn.h"
+#include "locker.h"
 
 class Timer
 {
@@ -46,6 +47,7 @@ public:
    void tick();
 private:
    void add_timerA(Timer* timer,Timer* lst_head);
+   Mutex mutex;
 private:
 	Timer* head;
 	Timer* tail;
