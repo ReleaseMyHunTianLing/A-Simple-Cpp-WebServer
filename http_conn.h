@@ -15,7 +15,9 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <sys/uio.h>
-
+#include <time.h>
+//#include "timer.h"
+class Timer;
 
 #define MAX_FD 65536
 class Http_conn
@@ -113,12 +115,16 @@ class Http_conn
 		void close_conn();
 		void init(int sockfd,struct sockaddr_in address);
 		void init();
-	public:
+
 		static int m_epollfd;					//所有事件注册的同一个内核epoll事件表
 		static int m_user_count;         //接入的客户端数目，即用户数量
 
 		int m_sockfd;								//该http连接的socket和对方socket的地址  
 		struct sockaddr_in m_address;
+
+		Timer* m_timer;                   //定时器相关
+		//Timer* get_timer(){return m_timer;}
+		//void set_timer(Timer* timer){m_timer = timer;}
 };
 
 #endif

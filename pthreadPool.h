@@ -6,7 +6,6 @@
 #include <pthread.h>
 #include <exception>
 #include "locker.h"
-//#include "chat.h"
 
 template<typename T>
 class ThreadPool
@@ -99,7 +98,6 @@ void ThreadPool<T>::run()
 		m_queuelocker.unlock();
 		if(!request)
 			continue;
-		//printf("one of threads is work,do the process()\n");
 		request -> process();                    //process()定义在数据结构T中，由线程池中工作线程调用，处理请求
 	}
 }

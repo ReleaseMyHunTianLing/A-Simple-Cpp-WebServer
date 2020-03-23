@@ -1,8 +1,10 @@
 #include"http_conn.h"
 #include <stdarg.h>
 #include <sys/wait.h>
+#include "timer.h"
 
-
+extern int TIMEOUT;
+extern Timer_list timer_list;
 //http响应信息
 const char* ok_200_title = "OK";
 const char* error_400_title = "Bad Request";
@@ -110,10 +112,19 @@ bool Http_conn::read()
             if(errno == EAGAIN || errno == EWOULDBLOCK){
                 break;
             }
+            if(m_timer)
+                timer_list.del_timer(m_timer);
             return false;
         }
         else if(read_bytes == 0){
+            if(m_timer)
+                timer_list.del_timer(m_timer);
             return false;
+        }
+        if(m_timer){
+            time_t cur = time(NULL);
+            m_timer->expire = cur+3*TIMEOUT;
+            timer_list.adjust_timer(m_timer);
         }
         m_read_idx += read_bytes;
     }
